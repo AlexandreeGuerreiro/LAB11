@@ -61,7 +61,7 @@
               </div>
             </li>
             <div>
-              <h4 align="right" style="color: white">Total: {{ getTotal() }}€</h4>
+              <h4 align="right" style="color: white">Total: {{totalPrice}}€</h4>
             </div>
 
 
@@ -126,6 +126,10 @@ export default {
   },
   created() {
     this.getBasket()
+    this.totalPrice = 0;
+    for (let index = 0; index < this.basket.length; index++) {
+        this.totalPrice = this.totalPrice + this.getPrice(this.basket[index]);
+      }
   },
   mounted() {
   },
@@ -142,17 +146,18 @@ export default {
     },
     addProduct(basketItem) {
       this.$store.commit('basket/incrementProduct', basketItem.id);
-    },
-    removeProduct(basketItem) {
-      this.$store.commit('basket/decrementProduct', basketItem.id);
-      this.isEmpty = this.basket[0] == undefined
-    },
-    getTotal() {
       this.totalPrice = 0;
       for (let index = 0; index < this.basket.length; index++) {
         this.totalPrice = this.totalPrice + this.getPrice(this.basket[index]);
       }
-      return this.totalPrice;
+    },
+    removeProduct(basketItem) {
+      this.$store.commit('basket/decrementProduct', basketItem.id);
+      this.isEmpty = this.basket[0] == undefined;
+      this.totalPrice = 0;
+      for (let index = 0; index < this.basket.length; index++) {
+        this.totalPrice = this.totalPrice + this.getPrice(this.basket[index]);
+      }
     },
     async addOrder() {
       let order = {

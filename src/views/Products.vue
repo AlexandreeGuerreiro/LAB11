@@ -11,7 +11,7 @@
             <div class="card-body">
               <div class="card-img-actions" height="100">
 
-                <td><img :src="require(`@/assets/images/products/${product.image}`)" class="card-img img-fluid"></td>
+                <td><img :src="require(`@/assets/images/${product.image}`)" class="card-img img-fluid"></td>
               </div>
             </div>
 

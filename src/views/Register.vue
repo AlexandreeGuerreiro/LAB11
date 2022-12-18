@@ -77,44 +77,35 @@ export default {
   },
 
   methods: {
-    validateForm() {
-
+    validate() {
       var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-		console.log(this.user.name);
-    //   console.log(this.user.password + " " + this.passwordConfirmation);
 
       if (!this.user.email.match(validRegex)) {
         this.error = true;
-        this.errorMsg = 'Invalid email format';
-        return false;
-      } else if (this.user.password !== this.passwordConfirmation) {
-
-        this.error = true;
-        this.errorMsg = 'Passwords dont match!';
         return false;
       } else if (this.user.password.length < 6) {
         this.error = true;
-        this.errorMsg = 'Passwords must be at least 6 characters long';
         return false;
-      }
+      } else if (this.user.password !== this.passwordConfirmation) {
+        this.error = true;
+        return false;
+      } 
 
       this.error = false;
-      this.errorMsg = '';
       return true;
     },
 
     async register() {
-      if (!this.validateForm()) {
-        return;
+      if (this.validate()) {
+        const exists = await this.$store.dispatch('user/userExists', this.user);
+        if(!exists) { //add user to database
+          const addedUser = await this.$store.dispatch('user/addUser');
+          console.log(addedUser);
+          this.$router.push({path: '/message/1'});
+        }
       }
-      const exists = await this.$store.dispatch('user/userExists', this.user);
-      if (exists) {
-        console.log("existe na BD");
-      } else { //add user to database
-        const addedUser = await this.$store.dispatch('user/addUser');
-        //this.$store.state.
-        console.log(addedUser);
-        this.$router.push({path: '/message/1'});
+      else {
+        return
       }
     },
   },

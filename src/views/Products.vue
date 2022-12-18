@@ -81,7 +81,6 @@ export default {
     },
 	addToBasket(product) {
 		this.$store.commit('basket/incrementProduct', product.id);
-		// console.log(this.$store.getters['basket/getProducts']);
 	},
   },
   computed: {},
